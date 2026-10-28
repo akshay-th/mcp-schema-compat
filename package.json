@@ -15,7 +15,7 @@
     "bin"
   ],
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/cli.test.js test/deref.test.js test/tools.test.js test/transform.test.js"
   },
   "engines": {
     "node": ">=18"
