@@ -21,6 +21,9 @@ const HINTS = {
 
 const COMBINATORS = ['anyOf', 'oneOf', 'allOf'];
 
+// Annotation-only keywords: dropping them doesn't change which values are valid.
+const HARMLESS = new Set(['$schema', '$id', '$comment', 'title', 'readOnly', 'writeOnly', 'deprecated', 'examples', 'example', 'contentMediaType', 'contentEncoding']);
+
 function isPlainObject(v) {
   return v != null && typeof v === 'object' && !Array.isArray(v);
 }
@@ -285,7 +288,10 @@ export function fixSchema(input, targetName) {
     if (target.emptyPropertiesInvalid && isObjectSchema(s)) {
       const empty = !isPlainObject(s.properties) || Object.keys(s.properties).length === 0;
       if (empty && isRoot) {
-        if ('properties' in s) delete s.properties;
+        if ('properties' in s) {
+          delete s.properties;
+          add(path, 'empty-properties', 'empty properties removed (rejected for OBJECT types)');
+        }
       } else if (empty) {
         const desc = 'JSON-encoded object';
         delete s.properties;
@@ -323,6 +329,7 @@ export function fixSchema(input, targetName) {
 
     if (allowed) {
       const removed = [];
+      const harmless = (k) => k in HINTS || HARMLESS.has(k) || (k === 'additionalProperties' && node.additionalProperties === false);
       for (const k of Object.keys(s)) {
         if (allowed.has(k)) continue;
         const hint = HINTS[k];
@@ -332,7 +339,7 @@ export function fixSchema(input, targetName) {
       }
       if (removed.length) {
         add(path, 'unsupported-keyword', `removed unsupported keywords: ${removed.join(', ')}`, {
-          lossy: removed.some((k) => !HINTS[k] && k !== '$schema' && k !== '$id' && k !== '$comment'),
+          lossy: removed.some((k) => !harmless(k)),
         });
       }
     }

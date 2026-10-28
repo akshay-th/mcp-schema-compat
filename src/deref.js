@@ -106,7 +106,8 @@ export function deref(schema, { keepRecursive = false } = {}) {
   if (out && typeof out === 'object' && !Array.isArray(out)) {
     if (keepRecursive && Object.keys(keptDefs).length) out.$defs = keptDefs;
     if ((schema.$defs || schema.definitions) && !recursive) {
-      changes.push({ path: '/$defs', rule: 'drop-defs', message: 'removed $defs after inlining', lossy: false });
+      const key = schema.$defs ? '$defs' : 'definitions';
+      changes.push({ path: `/${key}`, rule: 'drop-defs', message: `removed ${key} after inlining`, lossy: false });
     }
   }
   return { schema: out, changes, recursive };
