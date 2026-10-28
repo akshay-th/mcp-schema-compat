@@ -1,0 +1,40 @@
+{
+  "name": "mcp-schema-compat",
+  "version": "0.1.0",
+  "description": "Lint and rewrite MCP tool JSON Schemas so they work with Gemini, OpenAI strict mode and Anthropic. Library, CLI and stdio proxy.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "mcp-schema-compat": "./bin/cli.js"
+  },
+  "files": [
+    "src",
+    "bin"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "json-schema",
+    "gemini",
+    "openai",
+    "anthropic",
+    "function-calling",
+    "tool-calling",
+    "structured-outputs"
+  ],
+  "author": "akshay-th",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akshay-th/mcp-schema-compat.git"
+  }
+}
