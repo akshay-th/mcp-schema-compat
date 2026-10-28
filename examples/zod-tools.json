@@ -1,0 +1,38 @@
+{
+  "tools": [
+    {
+      "name": "github.create_issue",
+      "description": "Create a GitHub issue",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "repo": { "type": "string", "pattern": "^[^/]+/[^/]+$" },
+          "title": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "body": { "type": ["string", "null"] },
+          "labels": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "priority": { "type": "integer", "enum": [1, 2, 3] },
+          "due": { "type": "string", "format": "date" },
+          "estimate": { "type": "number", "exclusiveMinimum": 0 },
+          "metadata": { "type": "object", "additionalProperties": { "type": "string" } },
+          "assignee": { "$ref": "#/definitions/User" }
+        },
+        "required": ["repo", "title"],
+        "additionalProperties": false,
+        "definitions": {
+          "User": {
+            "type": "object",
+            "properties": { "login": { "type": "string" }, "id": { "type": "integer" } },
+            "required": ["login"],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "name": "list_repos",
+      "description": "List repositories",
+      "inputSchema": { "type": "object", "properties": {} }
+    }
+  ]
+}
